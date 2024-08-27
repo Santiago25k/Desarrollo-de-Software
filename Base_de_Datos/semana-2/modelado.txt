@@ -1,0 +1,10 @@
+1.¿Qué es el Modelado de Datos?
+ Modelado de Datos
+El modelado de datos es el proceso de creación de una representación visual o esquema que define los sistemas de recopilación y administración de información de cualquier organización. 
+Este esquema o modelo de datos ayuda a crear una vista unificada de los datos de una organización. 
+El modelo esboza los datos que recoge la empresa, la relación entre los distintos conjuntos de datos y los métodos que se usarán para almacenarlos y analizarlos.
+
+El modelado de datos aporta las siguientes ventajas:
+Reduce los errores en el desarrollo de software de bases de datos.
+Facilita la rapidez y eficacia en el diseño y creación de bases de datos.
+Facilita la comunicación entre los ingenieros de datos y los departamentos de inteligencia empresarial

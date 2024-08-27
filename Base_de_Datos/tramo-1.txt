@@ -1,0 +1,27 @@
+
+El primer tramo que tiene una duración de 1 mes en el cual nos centramos en comenzar el recorrido hacia el mundo de las base de datos. En lo aprenderemos desde que es un dato, como se representa hasta el armado de una estructura de tabla optimizando los recursos del sistema.
+
+Estos conocimientos nos permitirán manejarnos con propiedad a lo largo de la materia y servirán de base para ir avanzando semana a semana.
+
+
+
+Representar un modelo mediante diagrama de UML.
+Entender los conceptos de cardinalidad, entidad y relación.
+Generar un modelo de datos optimo.
+A partir de requisitos de un Product Owner usar distintas herramientas para implementar una base de datos. 
+
+
+Vocabulario.
+Datos e información. 
+Representación de los datos es un sistema informático. 
+Sistema de archivos.
+Diagramación usando  UML.
+Modelo de entidad relación.
+Modelados de datos. 
+Definición de Base de Datos. 
+Definición de sistema de Gestión de base de datos (SGBD). 
+Base de datos Relacional. 
+Lenguaje SQL. 
+Comandos Principales DDL, DML, DCL y TCL. 
+Tipo de Datos
+Profundización de comandos DDL (Crear, Modificar y Eliminar objetos).

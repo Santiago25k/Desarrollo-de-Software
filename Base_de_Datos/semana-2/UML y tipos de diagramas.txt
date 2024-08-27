@@ -1,0 +1,18 @@
+1. Introducción a UML
+Comprensión de los modelos
+
+
+Un modelo es una colección de imágenes y texto que representa algo; para nuestros fines  veremos el  modelo de software. 
+Un modelo es para el software lo que un plano azul es para una casa.
+Los modelos son valiosos por muchas razones específicas: 
+Constan de imágenes e, incluso, las imágenes simples pueden transmitir más información que una gran cantidad de texto; 
+Esto resulta coherente con el viejo adagio un tanto modificado de que una imagen expresa un millar de líneas de código. 
+Los modelos son valiosos porque es más fácil dibujar algunas imágenes sencillas que escribir código o incluso texto que describan lo mismo. 
+La verdad simple es que barato, rápido, fácil y flexible es lo que usted quiere cuando está resolviendo problemas.
+
+Comprensión del UML 
+UML Significa "Lenguaje Unificado de Modelado".
+UML tiene aplicaciones más allá del desarrollo de software, p. ej., en el flujo de procesos en la fabricación.
+El UML es una definición oficial de un lenguaje pictórico con símbolos y relaciones comunes que tienen un significado común. 
+Si todos los participantes hablan UML, entonces las imágenes tienen el mismo significado para todos aquellos que las observen. Por lo tanto, aprender UML es esencial para ser capaz de usar imágenes para experimentar barata, flexible y rápidamente con las soluciones. 
+El UML comprende símbolos y una gramática que define la manera en que se pueden usar estos símbolos. 
