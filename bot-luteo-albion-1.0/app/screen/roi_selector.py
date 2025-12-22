@@ -9,6 +9,7 @@ class ROISelector:
         self.drawing = False
         self.roi = None
 
+    # ---------------------- Mouse callback ----------------------
     def _mouse(self, event, x, y, flags, param):
         if event == cv2.EVENT_LBUTTONDOWN:
             self.start = (x, y)
@@ -31,6 +32,7 @@ class ROISelector:
                 abs(y2 - y1),
             )
 
+    # ---------------------- Selección estática ----------------------
     def select_static(self, frame):
         self.roi = None
         self.start = None
@@ -65,3 +67,31 @@ class ROISelector:
 
         cv2.setMouseCallback(self.window_name, lambda *args: None)
         return self.roi
+
+    # ---------------------- Generar grilla ----------------------
+    def generate_grid(self, roi, rows, cols):
+        """
+        roi: (x, y, w, h)
+        rows: cantidad de filas
+        cols: cantidad de columnas
+        devuelve lista de celdas [(x, y, w, h), ...]
+        """
+        x, y, w, h = roi
+        cell_w = w // cols
+        cell_h = h // rows
+        cells = []
+        for r in range(rows):
+            for c in range(cols):
+                cell_x = x + c * cell_w
+                cell_y = y + r * cell_h
+                cells.append((cell_x, cell_y, cell_w, cell_h))
+        return cells
+
+    # ---------------------- Mostrar grilla ----------------------
+    def draw_grid(self, frame, cells, color=(255, 0, 0), thickness=2):
+        temp = frame.copy()
+        for cx, cy, cw, ch in cells:
+            cv2.rectangle(temp, (cx, cy), (cx + cw, cy + ch), color, thickness)
+        cv2.imshow(self.window_name, temp)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
