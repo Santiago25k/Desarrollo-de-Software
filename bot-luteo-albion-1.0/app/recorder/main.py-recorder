@@ -1,0 +1,23 @@
+# main.py
+import time
+from app.recorder.mouserecorder import start_mouse_listener
+from app.recorder.keyboardrecorder import start_keyboard_listener
+from app.recorder.recorderinput import on_mouse_click, on_key_press, on_key_release
+
+
+def main():
+    print("Mantene Shift izquierdo para grabar...")
+
+    start_mouse_listener(on_mouse_click)
+    start_keyboard_listener(on_key_press, on_key_release)
+
+    # Loop principal
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("\nPrograma finalizado.")
+
+
+if __name__ == "__main__":
+    main()
