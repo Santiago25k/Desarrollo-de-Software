@@ -1,0 +1,31 @@
+import time
+import json
+from app.input import mouse, keyboard as kb
+
+GRID_FILE = "popup_grid.json"
+SEQUENCE = [0, 1, 2, 5, 4, 3, 6, 7, 8]
+
+
+def main():
+    with open(GRID_FILE, "r") as f:
+        grid_data = json.load(f)
+
+    cells = grid_data["cells"]
+
+    print("Mantén presionado Shift izquierdo para iniciar...")
+    while not kb.is_shift_pressed():
+        time.sleep(0.1)
+
+    print("Shift detectado, iniciando clicks en la grilla...")
+    time.sleep(0.2)
+
+    for index in SEQUENCE:
+        cell = cells[index]
+        mouse.click_cell(cell, hold_time=0.2, delay_after_move=0.05)
+        time.sleep(0.1)  # pequeño delay entre celdas
+
+    print("Todos los clicks completados.")
+
+
+if __name__ == "__main__":
+    main()
