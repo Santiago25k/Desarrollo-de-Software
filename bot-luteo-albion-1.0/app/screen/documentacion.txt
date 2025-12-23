@@ -1,0 +1,2 @@
+esta carpeta es utilizada para sacar captura de pantalla y dibujar un grid con celdas
+tambien calcula las cordenadas de dicho grid
