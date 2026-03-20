@@ -1,2 +1,0 @@
-esta carpeta es utilizada para grabar manualmente los clicks encada celda de manera serpentina
-y tambien calcula el tiempo en el que se hace
