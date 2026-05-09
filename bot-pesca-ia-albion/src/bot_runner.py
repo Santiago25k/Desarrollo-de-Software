@@ -11,6 +11,9 @@ from src.mount.controller import montar, desmontar
 from src.fishing.loop import ejecutar_ciclo_pesca
 from src.perception.hp_reader import HpReader
 from src.combat.handler import manejar_combate, huir
+from src.navigation.waypoints import cargar as cargar_waypoints
+from src.navigation.navigator import navegar_por_waypoints
+from src.config import RUTA_DEFAULT
 
 
 def _hilo_monitor_hp(sm: StateMachine, hp_reader: HpReader, stop_event: threading.Event):
@@ -47,12 +50,14 @@ def ejecutar_bot(sm: StateMachine, pause_event: threading.Event, stop_event: thr
 
         elif estado == Estado.MONTANDO:
             montar(log_callback=sm.log)
-            # Fase 2 agregara NAVEGANDO aqui
-            sm.transicion(Estado.DESMONTANDO)
+            sm.transicion(Estado.NAVEGANDO)
 
         elif estado == Estado.NAVEGANDO:
-            # Placeholder Fase 2
-            sm.log("[NAV] Navegacion no implementada (Fase 2).")
+            try:
+                waypoints = cargar_waypoints(RUTA_DEFAULT)
+                navegar_por_waypoints(sm, waypoints, stop_event=stop_event)
+            except FileNotFoundError:
+                sm.log(f"[NAV] No hay ruta '{RUTA_DEFAULT}'. Grabala con recorder.py.")
             sm.transicion(Estado.DESMONTANDO)
 
         elif estado == Estado.DESMONTANDO:

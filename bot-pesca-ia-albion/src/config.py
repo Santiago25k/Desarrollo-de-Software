@@ -48,6 +48,21 @@ PUZZLE_ZONA_DER      = 215    # limite derecho de la zona segura del puzzle
 SPOT_X = 300
 SPOT_Y = 450
 
+# ── Minimapa (calibrar segun resolucion y escala de UI de Albion Online) ─────
+# Region del minimapa en pantalla (esquina superior derecha)
+REGION_MINIMAP = {
+    'left': 11, 'top': 730, 'width': 487, 'height': 331,
+}
+# Color HSV de la flecha del jugador en el minimapa — cyan/celeste de Albion Online
+MINIMAP_JUGADOR_LOW  = (85,  100, 150)
+MINIMAP_JUGADOR_HIGH = (105, 255, 255)
+# Tolerancia en pixeles de minimapa para dar un waypoint por alcanzado
+WAYPOINT_RADIO   = 10
+# Segundos maximos esperando llegar a un waypoint antes de continuar
+WAYPOINT_TIMEOUT = 30
+# Nombre del archivo JSON de ruta a cargar desde waypoints/
+RUTA_DEFAULT = "ruta_default"
+
 # ── Fishing ──────────────────────────────────────────────────────────────────
 TIEMPO_COMIDA       = 1800   # segundos entre usos de comida (30 min)
 TIEMPO_ESPERA_EQUIP = 11     # segundos tras equipar comida antes de usarla

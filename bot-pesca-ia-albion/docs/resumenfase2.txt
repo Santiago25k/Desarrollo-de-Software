@@ -1,0 +1,36 @@
+ ---
+  Fase 2 — Archivos creados
+
+  ┌─────────────────────────────┬────────────────────────────────────────────────────────────────────────────────────────────┐
+  │           Archivo           │                                          Qué hace                                          │
+  ├─────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ src/navigation/waypoints.py │ cargar(), guardar(), listar() — JSON en waypoints/                                         │
+  ├─────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ src/navigation/minimap.py   │ get_player_pos() detecta el punto del jugador por color HSV; debug_ventana() para calibrar │
+  ├─────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ src/navigation/navigator.py │ Loop: click en minimapa → espera llegada por radio → siguiente waypoint                    │
+  ├─────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ src/navigation/recorder.py  │ Script standalone: F2 graba mouse, F3 graba jugador detectado, ESC guarda                  │
+  ├─────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ calibrar_minimap.py         │ Herramienta standalone: seleccion visual de region + debug HSV en tiempo real              │
+  └─────────────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────┘
+
+  Cambios existentes
+
+  - src/config.py — REGION_MINIMAP, MINIMAP_JUGADOR_LOW/HIGH, WAYPOINT_RADIO, WAYPOINT_TIMEOUT, RUTA_DEFAULT
+  - src/bot_runner.py — MONTANDO ahora va a NAVEGANDO (no a DESMONTANDO directo)
+  - requirements.txt — agrega keyboard==0.13.5
+
+  Calibracion completada (2026-05-09)
+
+  - REGION_MINIMAP calibrado: {'left': 11, 'top': 730, 'width': 487, 'height': 331}
+  - MINIMAP_JUGADOR_LOW/HIGH ajustado a rango cyan (flecha del jugador en Albion Online):
+      LOW  = (85,  100, 150)
+      HIGH = (105, 255, 255)
+  - Deteccion verificada con debug_ventana(): circulo verde sobre la flecha, mascara HSV correcta
+
+  Flujo de uso
+
+  1. Calibrar minimapa: python calibrar_minimap.py (seleccion visual + debug HSV) ✓ COMPLETADO
+  2. Grabar ruta: python -m src.navigation.recorder ruta_default (con Albion abierto, navegar presionando F2/F3)
+  3. Correr bot: python interfaz.py — navega antes de pescar

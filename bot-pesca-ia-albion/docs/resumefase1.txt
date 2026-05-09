@@ -1,0 +1,26 @@
+● Fase 1 completada. Esto es lo que quedo:
+
+  ---                                                                                                                                                                         Resumen de lo construido
+                                                                                                                                                                              bot-pesca-ia-albion/
+  ├── interfaz.py              ← GUI nueva (label de estado en tiempo real)
+  ├── src/
+  │   ├── config.py            ← toda la config en un lugar (teclas, regiones, umbrales)
+  │   ├── state_machine.py     ← 9 estados, thread-safe
+  │   ├── bot_runner.py        ← loop principal + hilo monitor de HP
+  │   ├── fishing/             ← bot de pesca limpio (5 fixes del v2.1)
+  │   ├── mount/controller.py  ← montar/desmontar
+  │   ├── perception/hp_reader.py ← lee HP por color
+  │   ├── combat/handler.py    ← Tab target + 1→2→3 + huida
+  │   └── navigation/          ← placeholder Fase 2
+
+  Fixes respecto a v2.1:
+  - alga.py ahora tiene log_callback (los logs aparecen en la GUI)
+  - funciones_utiles.py esta en el lugar correcto (no mas errores de import)
+  - Extensiones de imagen uniformes (.PNG en todos lados)
+  - stopBot ya no usa sys.exit() — usa un stop_event que detiene el hilo limpiamente
+  - Resolucion configurable en config.py (no mas 1920x1080 hardcodeado)
+
+  Antes de correr por primera vez:
+  1. Copiar imagenes desde bot-pesca-albion-2.1/bot/img/ a img/
+  2. Calibrar REGION_HP en src/config.py segun tu pantalla
+  3. Verificar que TECLA_MONTURA = '5' coincide con tu keybind

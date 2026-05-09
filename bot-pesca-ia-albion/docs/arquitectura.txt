@@ -1,0 +1,151 @@
+ Arquitectura: WATCHMAN BOT v3.0 con IA                                                                                                                                    
+  ---                                                                                                                                                                         Maquina de estados (el cerebro central)
+
+  ┌─────────────────────────────────────────────────────────────────┐
+  │                        STATE MACHINE                            │
+  │                                                                 │
+  │   INICIO → MONTAR → NAVEGAR → LLEGAR → DESMONTAR → PESCAR      │
+  │               ↑         │                            │          │
+  │               │         ↓                            ↓          │
+  │            HUIR ←── COMBATE ←────────────────────────          │
+  │                         │                                       │
+  │                    [HP muy bajo]                                │
+  │                         ↓                                       │
+  │                       MUERTO → RESPAWN → INICIO                 │
+  └─────────────────────────────────────────────────────────────────┘
+
+  ---
+  Los 5 modulos del sistema
+
+  ┌──────────────────────────────────────────────────────┐
+  │  1. PERCEPTION (lo que el bot "ve")                  │
+  │     - Lector de barra de HP (color, posicion fija)   │
+  │     - YOLO: detecta mobs, jugadores, spots de pesca  │
+  │     - Lector de minimap (posicion actual)            │
+  │     - Detector de estado de montura (icono UI)       │
+  └──────────────────────────────────────────────────────┘
+                ↓
+  ┌──────────────────────────────────────────────────────┐
+  │  2. NAVIGATOR                                         │
+  │     - Lista de waypoints por mapa (grabados)         │
+  │     - Click-to-move hacia siguiente waypoint         │
+  │     - Si YOLO detecta enemigo en ruta → rodeo        │
+  └──────────────────────────────────────────────────────┘
+                ↓
+  ┌──────────────────────────────────────────────────────┐
+  │  3. COMBAT HANDLER                                    │
+  │     - Trigger: HP baja O YOLO detecta ataque         │
+  │     - Click en el mob mas cercano                    │
+  │     - Presiona 1 → 2 → 3 en ciclo                   │
+  │     - Si HP < 30% → activa HUIR                      │
+  └──────────────────────────────────────────────────────┘
+                ↓
+  ┌──────────────────────────────────────────────────────┐
+  │  4. MOUNT CONTROLLER                                  │
+  │     - Montar: tecla asignada al salir de pesca       │
+  │     - Desmontar: al llegar al radio del spot         │
+  │     - Si en combate: no puede montar (cooldown)      │
+  └──────────────────────────────────────────────────────┘
+                ↓
+  ┌──────────────────────────────────────────────────────┐
+  │  5. FISHING BOT (ya existe, se reutiliza)            │
+  │     - Igual que v2.1                                 │
+  │     - Si es atacado: pausa y cede al COMBAT HANDLER  │
+  │     - Al terminar combate: retoma desde donde estaba │
+  └──────────────────────────────────────────────────────┘
+
+  ---
+  Que necesita entrenamiento de IA y que no
+
+  ┌──────────────────────────────┬──────────────────────────────────────────┬─────────────────────────────────┐
+  │          Componente          │                 Tecnica                  │       Requiere entrenar?        │
+  ├──────────────────────────────┼──────────────────────────────────────────┼─────────────────────────────────┤
+  │ Detectar HP                  │ Color detection (siempre misma posicion) │ No                              │
+  ├──────────────────────────────┼──────────────────────────────────────────┼─────────────────────────────────┤
+  │ Detectar mobs/jugadores      │ YOLOv8                                   │ Si, ~500-1000 fotos etiquetadas │
+  ├──────────────────────────────┼──────────────────────────────────────────┼─────────────────────────────────┤
+  │ Detectar spots de pesca      │ YOLOv8 (mismo modelo)                    │ Si, mismas fotos                │
+  ├──────────────────────────────┼──────────────────────────────────────────┼─────────────────────────────────┤
+  │ Montura activa               │ Template matching (icono UI fijo)        │ No                              │
+  ├──────────────────────────────┼──────────────────────────────────────────┼─────────────────────────────────┤
+  │ Navegar entre spots          │ A* sobre waypoints grabados              │ No                              │
+  ├──────────────────────────────┼──────────────────────────────────────────┼─────────────────────────────────┤
+  │ Evitar obstaculos            │ YOLO output + desvio simple              │ Usa YOLO                        │
+  ├──────────────────────────────┼──────────────────────────────────────────┼─────────────────────────────────┤
+  │ Detectar estado (en combate) │ HP + YOLO combinados                     │ No                              │
+  └──────────────────────────────┴──────────────────────────────────────────┴─────────────────────────────────┘
+
+  El unico modelo que hay que entrenar es YOLOv8, que detecta 3 clases:
+  - mob → monstruo enemigo
+  - player → jugador
+  - fishing_spot → punto de pesca
+
+  ---
+  Flujo detallado de un ciclo completo
+
+  1. INICIO
+     └─ Chequea HP, inventario, estado
+
+  2. MONTAR
+     └─ Presiona tecla montura
+     └─ Espera icono de montado (template matching)
+
+  3. NAVEGAR AL SPOT
+     ├─ Carga lista de spots del mapa actual
+     ├─ Elige el mas cercano (por minimap)
+     ├─ Click-to-move por waypoints
+     └─ LOOP:
+         ├─ YOLO escanea pantalla cada 500ms
+         ├─ [Mob/jugador a menos de X px] → rodear
+         ├─ [Atacado de sorpresa] → COMBATE
+         └─ [Llego al radio del spot] → continuar
+
+  4. DESMONTAR
+     └─ Presiona tecla montura
+     └─ Espera icono de desmontado
+
+  5. PESCAR (bot existente)
+     └─ LOOP de pesca normal
+         ├─ [HP baja] → COMBATE
+         ├─ [Sin picada en 3 min] → siguiente spot
+         └─ [Inventario lleno] → (v4, para despues)
+
+  6. COMBATE
+     ├─ Click en el enemigo mas proximo detectado por YOLO
+     ├─ Presiona 1 → espera 0.5s → 2 → espera 0.5s → 3 → cicla
+     ├─ [Enemigo muerto, HP ok] → retoma estado anterior
+     └─ [HP < 30%] → HUIR
+
+  7. HUIR
+     ├─ Suelta el mouse (si estaba pescando)
+     ├─ Intenta montar (si no esta en cooldown de combate)
+     ├─ Corre en direccion opuesta al enemigo
+     └─ [Lejos y seguro] → INICIO
+
+  ---
+  Orden de construccion recomendado
+
+  FASE 1 - Base (2-3 semanas)
+    ├─ Refactorizar bot/ y bot1/ en un solo paquete limpio
+    ├─ Implementar State Machine central
+    └─ Mount Controller (montar/desmontar)
+
+  FASE 2 - Navegacion (2-3 semanas)
+    ├─ Sistema de waypoints (grabar rutas manualmente)
+    ├─ Minimap position reader
+    └─ Click-to-move con waypoints
+
+  FASE 3 - Percepcion IA (3-4 semanas)
+    ├─ Recolectar y etiquetar screenshots (YOLOv8)
+    ├─ Entrenar modelo (mobs, players, spots)
+    └─ Integrar YOLO al modulo de percepcion
+
+  FASE 4 - Combate (1-2 semanas)
+    ├─ HP reader
+    ├─ Target + skill rotation
+    └─ Logica huir
+
+  FASE 5 - Integracion y pruebas
+    └─ Conectar todo a la State Machine
+
+  ---
